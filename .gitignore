@@ -1,0 +1,4 @@
+output-virtualbox-ovf/*
+packer_cache/*
+packer_virtualbox-ovf_virtualbox.box
+.vagrant/*

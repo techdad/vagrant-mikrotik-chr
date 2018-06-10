@@ -1,0 +1,48 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "http://blob.xlw.be/chr-6.42.3.ova",
+      "ssh_username": "vagrant",
+      "ssh_password" : "vagrant",
+      "ssh_private_key_file": "vagrant_private_key",
+      "guest_additions_mode": "disable",
+      "ssh_timeout": "80s",
+      "boot_wait": "20s",
+      "boot_command": [
+        "admin<enter><wait>",
+        "<enter><wait>",
+        "n<wait2>",
+        "/ip dhcp-client add disabled=no interface=ether1<enter><wait>",
+        "/user add name=vagrant password=vagrant group=full<enter>",
+        "/system package enable ipv6<enter>",
+        "/ip ssh set always-allow-password-login=yes<enter>",
+        "/tool fetch url=\"https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub\" mode=https<enter><wait5>",
+        "/user ssh-keys import user=vagrant public-key-file=vagrant.pub<enter>"
+      ],
+      "output_directory": "vitualboxvm",
+      "shutdown_command": "execute \"/system shutdown\"",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "128"],
+        ["modifyvm", "{{.Name}}", "--acpi", "on"],
+        ["modifyvm", "{{.Name}}", "--ioapic", "on"],
+        ["modifyvm", "{{.Name}}", "--hpet", "on"],
+        ["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
+        ["modifyvm", "{{.Name}}", "--pae", "on"],
+        ["modifyvm", "{{.Name}}", "--usb", "on"],
+        ["modifyvm", "{{.Name}}", "--usbehci", "off"],
+        ["modifyvm", "{{.Name}}", "--uart1", "0x3F8", "4"],
+        ["modifyvm", "{{.Name}}", "--nic1", "nat"],
+        ["modifyvm", "{{.Name}}", "--cableconnected1", "on"],
+        ["modifyvm", "{{.Name}}", "--nic2", "intnet"],
+        ["modifyvm", "{{.Name}}", "--cableconnected2", "on"],
+        ["modifyvm", "{{.Name}}", "--nic3", "null"],
+        ["modifyvm", "{{.Name}}", "--cableconnected3", "off"]
+      ]
+    }
+  ],
+  "post-processors": [{
+    "vagrantfile_template": "vagrantfile_template",
+    "type": "vagrant"
+  }]
+}
