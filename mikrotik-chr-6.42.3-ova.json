@@ -4,11 +4,12 @@
       "type": "virtualbox-ovf",
       "source_path": "http://blob.xlw.be/chr-6.42.3.ova",
       "ssh_username": "vagrant",
-      "ssh_password" : "vagrant",
+      "ssh_password": "vagrant",
       "ssh_private_key_file": "vagrant_private_key",
       "guest_additions_mode": "disable",
-      "ssh_timeout": "80s",
-      "boot_wait": "20s",
+      "ssh_timeout": "200s",
+      "ssh_agent_auth": true,
+      "boot_wait": "18s",
       "boot_command": [
         "admin<enter><wait>",
         "<enter><wait>",
@@ -17,8 +18,8 @@
         "/user add name=vagrant password=vagrant group=full<enter>",
         "/system package enable ipv6<enter>",
         "/ip ssh set always-allow-password-login=yes<enter>",
-        "/tool fetch url=\"https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub\" mode=https<enter><wait5>",
-        "/user ssh-keys import user=vagrant public-key-file=vagrant.pub<enter>"
+        "/tool fetch url=\"https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub\" mode=https<enter><wait2>",
+        "/user ssh-keys import user=vagrant public-key-file=vagrant.pub<enter><wait15>"
       ],
       "output_directory": "vitualboxvm",
       "shutdown_command": "execute \"/system shutdown\"",
