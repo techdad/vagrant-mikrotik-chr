@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "virtualbox-ovf",
-      "source_path": "http://blob.xlw.be/chr-6.42.3.ova",
+      "source_path": "chr-6.42.6.ova",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_private_key_file": "vagrant_private_key",
@@ -13,15 +13,17 @@
       "boot_command": [
         "admin<enter><wait>",
         "<enter><wait>",
-        "n<wait2>",
-        "/ip dhcp-client add disabled=no interface=ether1<enter><wait>",
+        "n<wait>",
+        "/ip dhcp-client add interface=ether3 disabled=no<enter><wait>",
+        "/ip dhcp-client add interface=ether2 disabled=no<enter><wait>",
         "/user add name=vagrant password=vagrant group=full<enter>",
         "/system package enable ipv6<enter>",
-        "/ip ssh set always-allow-password-login=yes<enter>",
-        "/tool fetch url=\"https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub\" mode=https<enter><wait2>",
-        "/user ssh-keys import user=vagrant public-key-file=vagrant.pub<enter><wait15>"
+        "/ip ssh set always-allow-password-login=yes<enter><wait>",
+        "/tool fetch url=\"https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub\" mode=https<enter><wait>",
+        "/user ssh-keys import user=vagrant public-key-file=vagrant.pub<enter><wait10>"
       ],
       "output_directory": "vitualboxvm",
+      "virtualbox_version_file": "",
       "shutdown_command": "execute \"/system shutdown\"",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "128"],
@@ -35,8 +37,9 @@
         ["modifyvm", "{{.Name}}", "--uart1", "0x3F8", "4"],
         ["modifyvm", "{{.Name}}", "--nic1", "nat"],
         ["modifyvm", "{{.Name}}", "--cableconnected1", "on"],
-        ["modifyvm", "{{.Name}}", "--nic2", "intnet"],
+        ["modifyvm", "{{.Name}}", "--nic2", "hostonly"],
         ["modifyvm", "{{.Name}}", "--cableconnected2", "on"],
+        ["modifyvm", "{{.Name}}", "--hostonlyadapter2", "vboxnet0"],
         ["modifyvm", "{{.Name}}", "--nic3", "null"],
         ["modifyvm", "{{.Name}}", "--cableconnected3", "off"]
       ]
